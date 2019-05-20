@@ -3,13 +3,16 @@ const cors = require("cors");
 const helmet = require("helmet");
 const cool = require("cool-ascii-faces");
 
-const firebase = require("../firebase/config/firebase.js");
+
+const authRouter = require("./routers/authRouter.js");
 
 const server = express();
 
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
+
+server.use("/auth", authRouter);
 
 // just makes sure the server is live and running
 server.get("/", async (req, res) => {
@@ -19,38 +22,6 @@ server.get("/", async (req, res) => {
 // deployment check
 server.get("/cool", (req, res) => {
   res.send(cool());
-});
-
-server.post("/register", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const register = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .catch(function(error) {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ...
-        console.log(errorCode, errorMessage);
-      });
-    console.log(register);
-    if (register) {
-      res.status(201).json({
-        email: register.email,
-        uid: register.uid
-      });
-    } else {
-      res
-        .status(400)
-        .json({ error: "Please include email address and password" });
-    }
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .json({ error: "There was a problem processing your request" });
-  }
 });
 
 module.exports = server;
