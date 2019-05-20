@@ -1,10 +1,12 @@
 const router = require("express").Router();
 
 const firebase = require("../../firebase/config/firebase.js");
+const db = firebase.firestore();
 
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
   try {
+    // add user to Firebase auth
     const register = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -17,16 +19,15 @@ router.post("/register", async (req, res) => {
         res.status(400).json({ errorCode, errorMessage });
       });
     console.log(register);
-    if (register) {
-      res.status(201).json({
-        email: register.email,
-        uid: register.uid
-      });
-    } else {
-      res
-        .status(400)
-        .json({ error: "Please include email address and password" });
-    }
+    // add user to "users" collection in Firestore DB
+    await db
+      .collection("users")
+      .doc(register.user.uid)
+      .set({ email: register.user.email });
+    res.status(201).json({
+      email: register.user.email,
+      uid: register.user.uid
+    });
   } catch (err) {
     console.log(err);
     res
