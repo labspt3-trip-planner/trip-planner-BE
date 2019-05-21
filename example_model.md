@@ -37,6 +37,24 @@
   ]
   "flight_info": "Flight Number fd;lkj",
   "lodging": "Hotel Address"
+},
+lists: {
+  todo: [
+    {
+      item: "What to do",
+      completed: false
+    }
+  ],
+  packing: [
+    {
+      item: "Swim trunks",
+      completed: true
+    },
+    {
+      item: "baseball bat",
+      completed: false
+    }
+  ]
 }
 ```
 
