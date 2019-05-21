@@ -30,6 +30,11 @@
     "reference to destination"
   ],
   "planner": "iamauser",
+  "participants": [
+    "username",
+    "username",
+    "username"
+  ]
   "flight_info": "Flight Number fd;lkj",
   "lodging": "Hotel Address"
 }
