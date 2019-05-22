@@ -36,10 +36,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
-  const { email, password} = req.body;
-
-  
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // login user
+    const login = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ error: "There was a problem logging in" });
+  }
 });
 
 module.exports = router;
