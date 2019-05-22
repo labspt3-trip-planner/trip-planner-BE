@@ -13,7 +13,7 @@ function registerUser(userInfo) {
       return userRecord;
     })
     .catch(err => {
-      console.log("error creating new user:", err.toJSON());
+      console.log("error creating new user:", err);
       return err.errorInfo;
     });
 }
