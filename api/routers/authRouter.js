@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
     console.log(err);
     res
       .status(500)
-      .json({ error: "There was a problem logging in" });
+      .json({ error: "Failed to login" });
   }
 });
 
