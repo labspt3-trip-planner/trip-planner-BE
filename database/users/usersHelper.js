@@ -4,9 +4,9 @@ module.exports = {
   addUser
 };
 
-function addUser({ uid, email, password }) {
+function addUser(uid, email, password) {
   return db
     .collection("users")
-    .doc(uid)
+    .doc(uid.toString())
     .set({ email, password });
 }
