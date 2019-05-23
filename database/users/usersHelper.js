@@ -1,7 +1,8 @@
 const db = require("../../firebase/config/firebase").firestore();
 
 module.exports = {
-  addUser
+  addUser,
+  getByUid
 };
 
 function addUser(userInfo) {
@@ -10,4 +11,11 @@ function addUser(userInfo) {
     .collection("users")
     .doc(uid.toString())
     .set({ email, passwordHash });
+}
+
+function getByUid(uid) {
+  return db
+    .collection("users")
+    .doc(uid.toString())
+    .get();
 }
