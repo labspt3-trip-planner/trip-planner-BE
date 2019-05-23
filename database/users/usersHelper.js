@@ -3,7 +3,9 @@ const db = require("../../firebase/config/firebase").firestore();
 module.exports = {
   addUser,
   getByUid,
-  getByEmail
+  getByEmail,
+  updateUser,
+  removeUser
 };
 
 function addUser(userInfo) {
@@ -50,4 +52,18 @@ function getByEmail(email) {
       return accounts[0];
     })
     .catch(err => console.log("Error getting document", err));
+}
+//changes should be object containing key/value pairs to update
+function updateUser(uid, changes) {
+  return db
+    .collection("users")
+    .doc(uid.toString())
+    .update({ ...changes });
+}
+
+function removeUser(uid) {
+  return db
+    .collection("users")
+    .doc(uid.toString())
+    .delete();
 }
