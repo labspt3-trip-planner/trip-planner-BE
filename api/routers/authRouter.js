@@ -9,11 +9,7 @@ router.post("/register", async (req, res) => {
     const registered = await registerUser(user);
     console.log("endpoint:", registered);
     if (registered.uid) {
-      const didItWork = await addUser(
-        registered.uid,
-        registered.email,
-        registered.passwordHash
-      );
+      const didItWork = await addUser(registered);
       console.log(didItWork);
       res.status(201).json(registered);
     } else {
@@ -33,12 +29,10 @@ router.post("/login", async (req, res) => {
     // login user
     const login = await firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email, password);
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({ error: "Failed to login" });
+    res.status(500).json({ error: "Failed to login" });
   }
 });
 
