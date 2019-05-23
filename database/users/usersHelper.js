@@ -53,7 +53,7 @@ function getByEmail(email) {
     })
     .catch(err => console.log("Error getting document", err));
 }
-
+//changes should be object containing key/value pairs to update
 function updateUser(uid, changes) {
   return db
     .collection("users")
