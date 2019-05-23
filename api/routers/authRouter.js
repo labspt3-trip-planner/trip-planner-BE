@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const { registerUser } = require("../../firebase/auth/authHelpers.js");
+const { addUser } = require("../../database/users/usersHelper");
 
 router.post("/register", async (req, res) => {
   const user = req.body;
@@ -8,6 +9,12 @@ router.post("/register", async (req, res) => {
     const registered = await registerUser(user);
     console.log("endpoint:", registered);
     if (registered.uid) {
+      const didItWork = await addUser(
+        registered.uid,
+        registered.email,
+        registered.passwordHash
+      );
+      console.log(didItWork);
       res.status(201).json(registered);
     } else {
       res.status(400).json(registered);
