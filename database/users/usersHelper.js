@@ -4,9 +4,10 @@ module.exports = {
   addUser
 };
 
-function addUser(uid, email, password) {
+function addUser(userInfo) {
+  const { uid, email, passwordHash } = userInfo;
   return db
     .collection("users")
     .doc(uid.toString())
-    .set({ email, password });
+    .set({ email, passwordHash });
 }
