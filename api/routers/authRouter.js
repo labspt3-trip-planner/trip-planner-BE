@@ -1,7 +1,11 @@
 const router = require("express").Router();
 
 const { registerUser } = require("../../firebase/auth/authHelpers.js");
-const { addUser } = require("../../database/users/usersHelper");
+const {
+  addUser,
+  getByUid,
+  getByEmail
+} = require("../../database/users/usersHelper");
 
 router.post("/register", async (req, res) => {
   const user = req.body;
