@@ -2,7 +2,8 @@ const db = require("../../firebase/config/firebase").firestore();
 
 module.exports = {
   addUser,
-  getByUid
+  getByUid,
+  getByEmail
 };
 
 function addUser(userInfo) {
@@ -18,4 +19,8 @@ function getByUid(uid) {
     .collection("users")
     .doc(uid.toString())
     .get();
+}
+
+function getByEmail(email) {
+  return db.collection("users").where("email", "==", email);
 }
