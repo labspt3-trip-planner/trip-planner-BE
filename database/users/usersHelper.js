@@ -4,7 +4,8 @@ module.exports = {
   addUser,
   getByUid,
   getByEmail,
-  updateUser
+  updateUser,
+  removeUser
 };
 
 function addUser(userInfo) {
@@ -58,4 +59,11 @@ function updateUser(uid, changes) {
     .collection("users")
     .doc(uid.toString())
     .update({ ...changes });
+}
+
+function removeUser(uid) {
+  return db
+    .collection("users")
+    .doc(uid.toString())
+    .delete();
 }
