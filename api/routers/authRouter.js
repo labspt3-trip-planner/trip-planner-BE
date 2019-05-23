@@ -1,38 +1,44 @@
 const router = require("express").Router();
 
-const firebase = require("../../firebase/config/firebase.js");
-const db = firebase.firestore();
+const { registerUser } = require("../../firebase/auth/authHelpers.js");
+const {
+  addUser,
+  getByUid,
+  getByEmail
+} = require("../../database/users/usersHelper");
 
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const user = req.body;
   try {
-    // add user to Firebase auth
-    const register = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .catch(function(error) {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ...
-        console.log(errorCode, errorMessage);
-        res.status(400).json({ errorCode, errorMessage });
-      });
-    console.log(register);
-    // add user to "users" collection in Firestore DB
-    await db
-      .collection("users")
-      .doc(register.user.uid)
-      .set({ email: register.user.email });
-    res.status(201).json({
-      email: register.user.email,
-      uid: register.user.uid
-    });
+    //register user with firebase
+    const registered = await registerUser(user);
+    console.log("endpoint:", registered);
+    if (registered.uid) {
+      //add user information to users collection in Cloud Firestore DB
+      await addUser(registered);
+      res.status(201).json(registered);
+    } else {
+      //spits back error from firebase
+      res.status(400).json(registered);
+    }
   } catch (err) {
     console.log(err);
     res
       .status(500)
       .json({ error: "There was a problem processing your request" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // login user
+    const login = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Failed to login" });
   }
 });
 
