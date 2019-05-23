@@ -3,7 +3,8 @@ const db = require("../../firebase/config/firebase").firestore();
 module.exports = {
   addUser,
   getByUid,
-  getByEmail
+  getByEmail,
+  updateUser
 };
 
 function addUser(userInfo) {
@@ -50,4 +51,11 @@ function getByEmail(email) {
       return accounts[0];
     })
     .catch(err => console.log("Error getting document", err));
+}
+
+function updateUser(uid, changes) {
+  return db
+    .collection("users")
+    .doc(uid.toString())
+    .update({ ...changes });
 }
