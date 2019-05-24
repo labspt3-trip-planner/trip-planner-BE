@@ -25,6 +25,7 @@
 
 ```
 {
+  name: "Example name",
   destinations: [
     "reference to destination",
     "reference to destination"
