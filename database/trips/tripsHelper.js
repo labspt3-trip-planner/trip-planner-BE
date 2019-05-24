@@ -1,7 +1,8 @@
 const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
-  addTrip
+  addTrip,
+  getTripById
 };
 
 function addTrip(trip) {
@@ -12,3 +13,11 @@ function addTrip(trip) {
     .catch(err => err);
 }
 
+function getTripById(id) {
+  return db
+    .collection("trips")
+    .doc(`${id}`)
+    .get()
+    .then(res => res.data())
+    .catch(err => console.log(err));
+}
