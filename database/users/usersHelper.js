@@ -49,6 +49,7 @@ function getByEmail(email) {
       snapshot.forEach(doc => {
         accounts.push(doc.data());
       });
+      //returns first object in array
       return accounts[0];
     })
     .catch(err => console.log("Error getting document", err));
