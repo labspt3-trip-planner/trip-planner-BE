@@ -8,7 +8,7 @@ router.get('/users', (req, res) => {
 });
 
 router.get('/:uid', (req, res) => {
-    const { uid } = req.params;
+    const { uid } = req.body;
 
       getByUid(`${uid}`)
       .then(uid => {
