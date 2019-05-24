@@ -1,13 +1,14 @@
-const db = require("../../firebase/config/firebase.js");
+const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
   addTrip
 };
 
-function addTrip(uid, trip) {
+function addTrip(trip) {
   return db
-    .collections(trip)
-    .doc()
-    .set({ ...trip });
+    .collection("trips")
+    .add(trip)
+    .then(ref => ref.id)
+    .catch(err => err);
 }
 
