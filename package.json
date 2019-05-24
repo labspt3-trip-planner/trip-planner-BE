@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch",
     "start": "node index.js",
     "server": "nodemon"
   },
@@ -20,5 +20,8 @@
     "morgan": "^1.9.1",
     "node": "^12.2.0",
     "nodemon": "^1.19.0"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }
