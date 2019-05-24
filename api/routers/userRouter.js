@@ -10,7 +10,6 @@ router.get('/users/:id', (req, res) => {
     return db
     .collection('users')
     .getByUid()
-    .get()
     .then(user => {
         user[0].isAuth0 = user[0].password ? false : true;
         user[0].password = null;
