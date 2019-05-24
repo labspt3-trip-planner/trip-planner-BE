@@ -5,6 +5,7 @@ const cool = require("cool-ascii-faces");
 
 
 const authRouter = require("./routers/authRouter.js");
+const userRouter = require("./routers/userRouter");
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use("/auth", authRouter);
+server.use("/users", userRouter);
 
 // just makes sure the server is live and running
 server.get("/", async (req, res) => {
