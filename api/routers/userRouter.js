@@ -4,7 +4,15 @@ const { getByUid } = require("../../database/users/usersHelper");
 
 
 router.get('/users', (req, res) => {
+const { user } = req.body;
 
+  db('users')
+  .then(user => {
+    res.json(user);
+  })
+  .catch(() => {
+    res.status(500).json({ error: 'Unable to retrieve list of users.'})
+  })
 });
 
 router.get('/:uid', (req, res) => {
