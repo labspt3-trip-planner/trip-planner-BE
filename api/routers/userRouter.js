@@ -23,16 +23,10 @@ function listAllUsers(nextPageToken) {
   // Start listing users from the beginning of the users collection, 1000 at a time.
 }
 listAllUsers();
-router.get('/users', (req, res) => {
-const { user } = req.body;
 
-  db('users')
-  .then(user => {
-    res.json(user);
-  })
-  .catch(() => {
-    res.status(500).json({ error: 'Unable to retrieve list of users.'})
-  })
+// get all users
+router.get('/users', async (req, res) => {
+  return await listAllUsers();
 });
 
 router.get('/:uid', (req, res) => {
