@@ -26,7 +26,8 @@ listAllUsers();
 
 // get all users
 router.get('/users', async (req, res) => {
-  return await listAllUsers();
+  const {user} = req.body;
+  return await listAllUsers(user);
 });
 
 router.get('/:uid', (req, res) => {
