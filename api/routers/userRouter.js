@@ -6,32 +6,45 @@ const firebaseAdmin = require('../../firebase/config/firebase').auth()
 
 //firebase list all users
 function listAllUsers(nextPageToken) {
-  // lists a batch of users, 1000 at a time.
-  firebaseAdmin.listUsers(1000, nextPageToken)
+  let users = []
+  // lists a batch of users, 40 at a time.
+  firebaseAdmin.listUsers(5, nextPageToken)
   .then(function(listUsers) {
-    listUsers.users.forEach(function(userRecord) {
-      console.log('user', userRecord.toJSON());
-    });
-    if (listUsers.pageToken) {
-      // lists the next batch
-      listAllUsers(listUsers.pageToken);
-    }
+    // console.log(listUsers);
+
+   return  listUsers
+    // listUsers.users.forEach(function(userRecord) {
+    //   //console.log('user', userRecord.toJSON());
+    //   users.push(userRecord);
+    // });
+    // if (listUsers.pageToken) {
+    //   // lists the next batch
+    //   listAllUsers(listUsers.pageToken);
+    // }
   })
   .catch(function(error) {
     console.log('Error listing all the users in the DB.', error);
   });
-  // Start listing users from the beginning of the users collection, 1000 at a time.
+  // Start listing users from the beginning of the users collection, 40 at a time.
+  // return users;
 }
-listAllUsers();
+// console.log(listAllUsers());
+
+
 
 // get all users
 router.get('/users', async (req, res) => {
-  const {user} = req.body;
-  return await listAllUsers(user);
+  try {
+    const users = await firebaseAdmin.listUsers()
+console.log(users);
+    res.status(200).json( users );
+  } catch(error){
+    res.status(500).json(error);
+  }
 });
 
 router.get('/:uid', (req, res) => {
-    const { uid } = req.body;
+    const { uid } = req.params;
 
       getByUid(`${uid}`)
       .then(uid => {
