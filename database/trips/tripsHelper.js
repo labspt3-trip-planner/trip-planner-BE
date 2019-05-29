@@ -18,22 +18,24 @@ function addTrip(trip) {
 function getTripById(id) {
   return db
     .collection("trips")
-    .doc(id)
+    .doc(`${id}`)
     .get()
     .then(res => res.data())
-    .catch(err => console.log(err));
+    .catch(err => err);
 }
 
 function updateTrip(id, changes) {
   return db
     .collection("trips")
     .doc(`${id}`)
-    .update({ ...changes });
+    .update({ ...changes })
+    .then(res => res)
+    .catch(err => err);
 }
 
 function removeTrip(id) {
   return db
-    .collection("users")
+    .collection("trips")
     .doc(`${id}`)
     .delete();
 }
