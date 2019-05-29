@@ -4,7 +4,7 @@ const { getByUid } = require("../../database/users/usersHelper");
 
 const firebaseAdmin = require('../../firebase/config/firebase').auth()
 
-//firebase list all users
+//firebase methods list all users
 function listAllUsers(nextPageToken) {
   let users = []
   // lists a batch of users, 40 at a time.
@@ -30,6 +30,10 @@ function listAllUsers(nextPageToken) {
 }
 // console.log(listAllUsers());
 
+// Update user firebase method
+
+
+// endpoints
 
 
 // get all users
@@ -59,6 +63,18 @@ router.get('/:uid', (req, res) => {
           .status(404)
           .json({ error: "The user information could not be retrieved." });
       })
+  });
+
+
+  // DELETE endpoint delate a user
+  router.delete('/delete/:uid'), (req, res) => {
+
+  };
+
+
+  // PUT endpoint update user info
+  router.put('/edit/:uid', (req, res) => {
+
   });
 
 module.exports = router;
