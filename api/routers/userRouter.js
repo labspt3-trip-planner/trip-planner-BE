@@ -4,8 +4,9 @@ const { getByUid } = require("../../database/users/usersHelper");
 
 const firebase = require("../../firebase/config/firebase").auth();
 
+//firebase methods list all users
 function listAllUsers(nextPageToken) {
-  // List batch of users, 1000 at a time.
+  // List batch of users 1000 at a time.
   return firebase
     .listUsers(1000, nextPageToken)
     .then(function(listUsersResult) {
@@ -24,6 +25,29 @@ function listAllUsers(nextPageToken) {
       console.log("Error listing users:", error);
     });
 }
+// console.log(listAllUsers());
+
+// delete user firebase method
+
+function deleteUser() {
+
+  // delete a user with the UID
+
+  return firebase
+  .deleteUser(uid)
+    .then(function() {
+      console.log('Successfully deleted user');
+    })
+    .catch(function(error) {
+      console.log('Error deleting user:', error);
+    })
+};
+
+// Update user firebase method
+
+
+// endpoints
+
 
 // get all users
 router.get("/users", async (req, res) => {
@@ -57,5 +81,29 @@ router.get("/:uid", (req, res) => {
         .json({ error: "The user information could not be retrieved." });
     });
 });
+
+
+  // DELETE endpoint delete a user
+  router.delete('/delete/:uid'), (req, res) => {
+    const { uid } = req.params;
+
+    deleteUser(`${uid}`)
+      .then(uid => {
+        if(uid) {
+          res.json(uid);
+        } else {
+          res.status(404).json({ message: "User with that ID does not exist and could not be deleted from the DB."})
+        }
+      })
+      .catch(err => {
+        res.status(404).json({ error: "The user could not be deleted from the DB."})
+      })
+  };
+
+
+  // PUT endpoint update user info
+  router.put('/edit/:uid', (req, res) => {
+
+  });
 
 module.exports = router;
