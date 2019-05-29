@@ -3,7 +3,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const cool = require("cool-ascii-faces");
 
-
 const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
 
