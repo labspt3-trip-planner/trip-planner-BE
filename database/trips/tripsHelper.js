@@ -18,7 +18,7 @@ function addTrip(trip) {
 function getTripById(id) {
   return db
     .collection("trips")
-    .doc(`${id}`)
+    .doc(id)
     .get()
     .then(res => res.data())
     .catch(err => console.log(err));
