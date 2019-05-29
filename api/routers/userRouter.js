@@ -84,22 +84,23 @@ router.get("/:uid", (req, res) => {
 
 
   // DELETE endpoint delete a user
-  router.delete('/delete/:uid'), (req, res) => {
-    const { uid } = req.params;
-
-    deleteUser(`${uid}`)
-      .then(uid => {
-        if(uid) {
-          res.json(uid);
+  router.delete('/delete/:uid', async (req, res) => {
+    const uid = req.params;
+    try {
+        if (uid > 0) {
+            res.status(200).json({
+                message: "User has been deleted"
+            })
         } else {
-          res.status(404).json({ message: "User with that ID does not exist and could not be deleted from the DB."})
+            res.status(404).json({
+                error: "The User with the specified ID does not exist"
+            })
         }
-      })
-      .catch(err => {
-        res.status(404).json({ error: "The user could not be deleted from the DB."})
-      })
-  };
-
+    } catch (e) {
+        console.log(req.params);
+        res.status(500).json(e)
+    }
+});
 
   // PUT endpoint update user info
   router.put('/edit/:uid', (req, res) => {
