@@ -28,20 +28,17 @@ function listAllUsers(nextPageToken) {
 // console.log(listAllUsers());
 
 // delete user firebase method
-
 function deleteUser() {
-
-  // delete a user with the UID
-
+  
   return firebase
   .deleteUser(uid)
-    .then(function() {
-      console.log('Successfully deleted user');
-    })
-    .catch(function(error) {
-      console.log('Error deleting user:', error);
-    })
-};
+  .then(function() {
+    console.log('Successfully deleted user');
+  })
+  .catch(function(error) {
+    console.log('Error deleting user:', error);
+  });
+}
 
 // Update user firebase method
 
@@ -87,7 +84,7 @@ router.get("/:uid", (req, res) => {
   router.delete('/delete/:uid', async (req, res) => {
     const uid = req.params;
     try {
-        if (uid > 0) {
+        if (uid) {
             res.status(200).json({
                 message: "User has been deleted"
             })
