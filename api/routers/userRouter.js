@@ -2,7 +2,8 @@ const router = require("express").Router();
 
 const {
   getByUid,
-  getTripsByUser
+  removeUser,
+  updateUser
 } = require("../../database/users/usersHelper");
 
 const firebase = require("../../firebase/config/firebase").auth();
@@ -11,7 +12,7 @@ const firebase = require("../../firebase/config/firebase").auth();
 function listAllUsers(nextPageToken) {
   // List batch of users 1000 at a time.
   return firebase
-    .listUsers(1000, nextPageToken)
+    .listUsers(5, nextPageToken)
     .then(function(listUsersResult) {
       const userList = [];
       listUsersResult.users.forEach(function(userRecord) {
@@ -31,9 +32,9 @@ function listAllUsers(nextPageToken) {
 // console.log(listAllUsers());
 
 // delete user firebase method
-function deleteUser() {
+function deleteUser(uid) {
   return firebase
-    .deleteUser(uid)
+    .removeUser(uid)
     .then(function() {
       console.log("Successfully deleted user");
     })
@@ -61,6 +62,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
+// get user by ID
 router.get("/:uid", (req, res) => {
   const { uid } = req.params;
 
