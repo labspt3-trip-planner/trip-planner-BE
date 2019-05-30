@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { getByUid } = require("../../database/users/usersHelper");
+const { getByUid, removeUser, updateUser } = require("../../database/users/usersHelper");
 
 const firebase = require("../../firebase/config/firebase").auth();
 
@@ -31,7 +31,7 @@ function listAllUsers(nextPageToken) {
 function deleteUser(uid) {
   
   return firebase
-  .remove(uid)
+  .removeUser(uid)
   .then(function() {
     console.log('Successfully deleted user');
   })
