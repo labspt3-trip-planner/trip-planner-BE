@@ -41,7 +41,24 @@ function deleteUser(uid) {
 }
 
 // Update user firebase method
-
+function updateUsers() {
+  
+  updateUser(uid, {
+    email: 'modifiedUser@example.com',
+    phoneNumber: '+11234567890',
+    emailVerified: true,
+    password: 'newPassword',
+    displayName: 'Jane Doe',
+    photoURL: 'http://www.example.com/12345678/photo.png',
+    disabled: true
+  })
+  .then(function(userRecord) {
+    console.log('Successfully updated user', userRecord.toJSON());
+  })
+  .catch(function(error) {
+    console.log('Error updating user:', error);
+  })
+}
 
 // endpoints
 
