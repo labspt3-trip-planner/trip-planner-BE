@@ -1,6 +1,10 @@
 const router = require("express").Router();
 
-const { getByUid, removeUser, updateUser } = require("../../database/users/usersHelper");
+const {
+  getByUid,
+  removeUser,
+  updateUser
+} = require("../../database/users/usersHelper");
 
 const firebase = require("../../firebase/config/firebase").auth();
 
@@ -29,22 +33,19 @@ function listAllUsers(nextPageToken) {
 
 // delete user firebase method
 function deleteUser(uid) {
-  
   return firebase
-  .removeUser(uid)
-  .then(function() {
-    console.log('Successfully deleted user');
-  })
-  .catch(function(error) {
-    console.log('Error deleting user:', error);
-  });
+    .removeUser(uid)
+    .then(function() {
+      console.log("Successfully deleted user");
+    })
+    .catch(function(error) {
+      console.log("Error deleting user:", error);
+    });
 }
 
 // Update user firebase method
 
-
 // endpoints
-
 
 // get all users
 router.get("/users", async (req, res) => {
@@ -80,29 +81,42 @@ router.get("/:uid", (req, res) => {
     });
 });
 
-
-  // DELETE endpoint delete a user
-  router.delete('/delete/:uid', async (req, res) => {
-    const uid = req.params;
-    try {
-        if (uid) {
-            res.status(200).json({
-                message: "User has been deleted"
-            })
-        } else {
-            res.status(404).json({
-                error: "The User with the specified ID does not exist"
-            })
-        }
-    } catch (e) {
-        console.log(req.params);
-        res.status(500).json(e)
+router.get("/:uid/trips", async (req, res) => {
+  const { uid } = req.params;
+  try {
+    const trips = await getTripsByUser(uid);
+    console.log(trips);
+    if (trips.length) {
+      res.status(200).json(trips);
+    } else {
+      res.status(404).json({ err: "User has no trips planned" });
     }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
-  // PUT endpoint update user info
-  router.put('/edit/:uid', (req, res) => {
+// DELETE endpoint delete a user
+router.delete("/delete/:uid", async (req, res) => {
+  const uid = req.params;
+  try {
+    if (uid) {
+      res.status(200).json({
+        message: "User has been deleted"
+      });
+    } else {
+      res.status(404).json({
+        error: "The User with the specified ID does not exist"
+      });
+    }
+  } catch (e) {
+    console.log(req.params);
+    res.status(500).json(e);
+  }
+});
 
-  });
+// PUT endpoint update user info
+router.put("/edit/:uid", (req, res) => {});
 
 module.exports = router;
