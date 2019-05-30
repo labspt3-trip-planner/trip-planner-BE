@@ -5,7 +5,8 @@ module.exports = {
   getByUid,
   getByEmail,
   updateUser,
-  removeUser
+  removeUser,
+  getTripsByUser
 };
 
 function addUser(userInfo) {
@@ -67,4 +68,15 @@ function removeUser(uid) {
     .collection("users")
     .doc(uid.toString())
     .delete();
+}
+
+async function getTripsByUser(uid) {
+  const trips = [];
+  await db
+    .collection("trips")
+    .where("planner", "==", `${uid}`)
+    .get()
+    .then(snapshot => snapshot.forEach(trip => trips.push(trip.data())))
+    .catch(err => console.log(err));
+  return trips;
 }
