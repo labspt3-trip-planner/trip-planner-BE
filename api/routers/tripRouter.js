@@ -63,9 +63,9 @@ router.delete("/:id", async (req, res) => {
     const trip = await db.getTripById(id);
     console.log(trip);
     if (trip) {
-      res.status(400).json({ ...trip });
+      res.status(400).json(trip);
     } else {
-      res.status(200).json({ ...trip });
+      res.status(200).json(trip);
     }
   } catch (err) {
     console.log(err);
