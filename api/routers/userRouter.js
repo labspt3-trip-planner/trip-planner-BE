@@ -3,7 +3,8 @@ const router = require("express").Router();
 const {
   getByUid,
   removeUser,
-  updateUser
+  updateUser,
+  getTripsByUser
 } = require("../../database/users/usersHelper");
 
 const firebase = require("../../firebase/config/firebase").auth();
