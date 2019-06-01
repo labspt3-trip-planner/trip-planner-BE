@@ -100,6 +100,7 @@ router.get("/:uid", (req, res) => {
     });
 });
 
+// GET trip by a UID
 router.get("/:uid/trips", async (req, res) => {
   const { uid } = req.params;
   try {
@@ -137,7 +138,9 @@ router.delete("/delete/:uid", async (req, res) => {
 
 
 // PUT endpoint update user info
-router.put("/edit/:uid", (req, res) => {});
+router.put("/edit/:uid", (req, res) => {
+  
+});
 
 
 module.exports = router;
