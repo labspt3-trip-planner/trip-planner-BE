@@ -129,4 +129,5 @@ router.get("/:uid/trips", async (req, res) => {
 // PUT endpoint update user info
 router.put("/edit/:uid", (req, res) => {});
 
+
 module.exports = router;
