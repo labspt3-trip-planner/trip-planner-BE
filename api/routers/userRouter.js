@@ -45,6 +45,24 @@ function deleteUser(uid) {
 }
 
 // Update user firebase method
+function updateUsers() {
+  
+  updateUser(uid, {
+    email: 'modifiedUser@example.com',
+    phoneNumber: '+11234567890',
+    emailVerified: true,
+    password: 'newPassword',
+    displayName: 'Jane Doe',
+    photoURL: 'http://www.example.com/12345678/photo.png',
+    disabled: true
+  })
+  .then(function(userRecord) {
+    console.log('Successfully updated user', userRecord.toJSON());
+  })
+  .catch(function(error) {
+    console.log('Error updating user:', error);
+  })
+}
 
 // endpoints
 
@@ -98,7 +116,7 @@ router.get("/:uid/trips", async (req, res) => {
   }
 });
 
-// DELETE endpoint delete a user
+    // DELETE endpoint delete a user
 router.delete("/delete/:uid", async (req, res) => {
   const uid = req.params;
   try {
@@ -117,7 +135,9 @@ router.delete("/delete/:uid", async (req, res) => {
   }
 });
 
+
 // PUT endpoint update user info
 router.put("/edit/:uid", (req, res) => {});
+
 
 module.exports = router;
