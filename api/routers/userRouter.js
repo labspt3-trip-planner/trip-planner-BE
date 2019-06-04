@@ -48,7 +48,7 @@ function deleteUser(uid) {
 function updateUsers() {
   
   updateUser(uid, {
-    email: 'modifiedUser@example.com',
+    email: 'user@test.com',
     phoneNumber: '+11234567890',
     emailVerified: true,
     password: 'newPassword',
@@ -139,7 +139,21 @@ router.delete("/delete/:uid", async (req, res) => {
 
 // PUT endpoint update user info
 router.put("/edit/:uid", (req, res) => {
-  
+  const uid = req.params;
+
+  try {
+    if(uid === undefined) {
+      res.status(400).json({
+        error: "User id is required to update the user"
+      })
+    }
+    const updateUsers = await updateUsers(uid);
+    res.status(200).json({
+      message: "User has been updated"
+    })
+  } catch (e) {
+    res.status(500).json(e)
+  }
 });
 
 
