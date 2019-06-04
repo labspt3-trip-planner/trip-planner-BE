@@ -45,24 +45,7 @@ function deleteUser(uid) {
 }
 
 // Update user firebase method
-function updateUsers() {
-  
-  updateUser(uid, {
-    email: 'user@test.com',
-    phoneNumber: '+11234567890',
-    emailVerified: true,
-    password: 'newPassword',
-    displayName: 'Jane Doe',
-    photoURL: 'http://www.example.com/12345678/photo.png',
-    disabled: true
-  })
-  .then(function(userRecord) {
-    console.log('Successfully updated user', userRecord.toJSON());
-  })
-  .catch(function(error) {
-    console.log('Error updating user:', error);
-  })
-}
+
 
 // endpoints
 
@@ -138,8 +121,8 @@ router.delete("/delete/:uid", async (req, res) => {
 
 
 // PUT endpoint update user info
-router.put("/edit/:uid", (req, res) => {
-  const uid = req.params;
+router.put("/edit/:uid", async (req, res) => {
+  const uid = req.body;
 
   try {
     if(uid === undefined) {
@@ -147,12 +130,13 @@ router.put("/edit/:uid", (req, res) => {
         error: "User id is required to update the user"
       })
     }
-    const updateUsers = await updateUsers(uid);
+    await updateUser(uid, req.body);
     res.status(200).json({
       message: "User has been updated"
     })
   } catch (e) {
     res.status(500).json(e)
+    console.log(e);
   }
 });
 
