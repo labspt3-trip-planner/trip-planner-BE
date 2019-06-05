@@ -1,4 +1,4 @@
-const db = require("../../firebase/config/firebase.js");
+const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
   add,
@@ -8,9 +8,8 @@ module.exports = {
 function add(favorite) {
   return db
     .collection("favorites")
-    .doc()
-    .set(favorite)
-    .then(ref => ref)
+    .add(favorite)
+    .then(ref => ref.id)
     .catch(err => err);
 }
 
