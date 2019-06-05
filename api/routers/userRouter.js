@@ -45,24 +45,7 @@ function deleteUser(uid) {
 }
 
 // Update user firebase method
-function updateUsers() {
-  
-  updateUser(uid, {
-    email: 'modifiedUser@example.com',
-    phoneNumber: '+11234567890',
-    emailVerified: true,
-    password: 'newPassword',
-    displayName: 'Jane Doe',
-    photoURL: 'http://www.example.com/12345678/photo.png',
-    disabled: true
-  })
-  .then(function(userRecord) {
-    console.log('Successfully updated user', userRecord.toJSON());
-  })
-  .catch(function(error) {
-    console.log('Error updating user:', error);
-  })
-}
+
 
 // endpoints
 
@@ -100,6 +83,7 @@ router.get("/:uid", (req, res) => {
     });
 });
 
+// GET trip by a UID
 router.get("/:uid/trips", async (req, res) => {
   const { uid } = req.params;
   try {
@@ -137,7 +121,24 @@ router.delete("/delete/:uid", async (req, res) => {
 
 
 // PUT endpoint update user info
-router.put("/edit/:uid", (req, res) => {});
+router.put("/edit/:uid", async (req, res) => {
+  const uid = req.body;
+
+  try {
+    if(uid === undefined) {
+      res.status(400).json({
+        error: "User id is required to update the user"
+      })
+    }
+    await updateUser(uid, req.body);
+    res.status(200).json({
+      message: "User has been updated"
+    })
+  } catch (e) {
+    res.status(500).json(e)
+    console.log(e);
+  }
+});
 
 
 module.exports = router;
