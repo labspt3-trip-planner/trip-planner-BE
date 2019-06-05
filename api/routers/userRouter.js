@@ -122,7 +122,8 @@ router.delete("/delete/:uid", async (req, res) => {
 
 // PUT endpoint update user info
 router.put("/edit/:uid", async (req, res) => {
-  const uid = req.body;
+  const uid = req.params;
+  const changes = req.body;
 
   try {
     if(uid === undefined) {
@@ -130,7 +131,7 @@ router.put("/edit/:uid", async (req, res) => {
         error: "User id is required to update the user"
       })
     }
-    await updateUser(uid, req.body);
+    await updateUser(uid, changes);
     res.status(200).json({
       message: "User has been updated"
     })
