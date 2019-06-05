@@ -50,7 +50,7 @@ function deleteUser(uid) {
 // endpoints
 
 // get all users
-router.get("/users", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const userList = await listAllUsers();
     if (userList) {
