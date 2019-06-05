@@ -20,7 +20,7 @@ function addUser(userInfo) {
 function getByUid(uid) {
   return db
     .collection("users")
-    .doc(uid.toString())
+    .doc(`${uid}`)
     .get()
     .then(doc => {
       if (!doc.exists) {
@@ -60,7 +60,9 @@ function updateUser(uid, changes) {
   return db
     .collection("users")
     .doc(`${uid}`)
-    .update({ ...changes });
+    .update({ ...changes })
+    .then(res => res)
+    .catch(err => err);
 }
 
 function removeUser(uid) {
