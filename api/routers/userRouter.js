@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const db = require("../../database/users/usersHelper.js");
 
-
 const {
   getByUid,
   removeUser,
@@ -15,7 +14,7 @@ const firebase = require("../../firebase/config/firebase").auth();
 function listAllUsers(nextPageToken) {
   // List batch of users 1000 at a time.
   return firebase
-    .listUsers(5, nextPageToken)
+    .listUsers(1000, nextPageToken)
     .then(function(listUsersResult) {
       const userList = [];
       listUsersResult.users.forEach(function(userRecord) {
@@ -47,7 +46,6 @@ function deleteUser(uid) {
 }
 
 // Update user firebase method
-
 
 // endpoints
 
@@ -102,7 +100,7 @@ router.get("/:uid/trips", async (req, res) => {
   }
 });
 
-    // DELETE endpoint delete a user
+// DELETE endpoint delete a user
 router.delete("/delete/:uid", async (req, res) => {
   const uid = req.params;
   try {
@@ -120,7 +118,6 @@ router.delete("/delete/:uid", async (req, res) => {
     res.status(500).json(e);
   }
 });
-
 
 // PUT endpoint update user info
 router.put("/edit/:uid", async (req, res) => {
@@ -141,6 +138,5 @@ router.put("/edit/:uid", async (req, res) => {
       .json({ err: "There was a problem processing your request" });
   }
 });
-
 
 module.exports = router;
