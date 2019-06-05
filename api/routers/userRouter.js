@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const db = require("../../database/users/usersHelper.js");
+
 
 const {
   getByUid,
@@ -122,22 +124,21 @@ router.delete("/delete/:uid", async (req, res) => {
 
 // PUT endpoint update user info
 router.put("/edit/:uid", async (req, res) => {
-  const uid = req.params;
+  const { uid } = req.params;
   const changes = req.body;
-
   try {
-    if(uid === undefined) {
-      res.status(400).json({
-        error: "User id is required to update the user"
-      })
+    const updated = await db.updateUser(uid, changes);
+    console.log(updated);
+    if (updated._writeTime) {
+      res.status(200).json(updated);
+    } else {
+      res.status(404).json({ err: "Trip not found" });
     }
-    await updateUser(uid, changes);
-    res.status(200).json({
-      message: "User has been updated"
-    })
-  } catch (e) {
-    res.status(500).json(e)
-    console.log(e);
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
   }
 });
 
