@@ -4,7 +4,8 @@ module.exports = {
   addTrip,
   getTripById,
   updateTrip,
-  removeTrip
+  removeTrip,
+  appendDestination
 };
 
 function addTrip(trip) {
@@ -38,4 +39,13 @@ function removeTrip(id) {
     .collection("trips")
     .doc(`${id}`)
     .delete();
+}
+
+function appendDestination(tripId, destination) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .update({ destinations: destination }, { merge: true })
+    .then(res => res)
+    .catch(err => err);
 }

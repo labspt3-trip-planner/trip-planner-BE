@@ -2,7 +2,8 @@ const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
   getById,
-  addDestination
+  getByName,
+  add
 };
 
 function getById(id) {
@@ -14,10 +15,29 @@ function getById(id) {
     .catch(err => err);
 }
 
-function addDestination(destination) {
+function getByName(name) {
+  return db
+    .collection("destinations")
+    .where("name", "==", name)
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log("No matching document");
+        return 0;
+      }
+      const destinations = [];
+      snapshot.forEach(doc => {
+        destinations.push(doc);
+      });
+      return destinations[0].ref;
+    })
+    .catch(err => console.log("getByName: ", err));
+}
+
+function add(destination) {
   return db
     .collection("destinations")
     .add(destination)
-    .then(ref => ref.id)
+    .then(ref => ref)
     .catch(err => err);
 }
