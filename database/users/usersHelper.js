@@ -59,7 +59,7 @@ function getByEmail(email) {
 function updateUser(uid, changes) {
   return db
     .collection("users")
-    .doc(uid.toString())
+    .doc(`${uid}`)
     .update({ ...changes });
 }
 
