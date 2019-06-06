@@ -1,4 +1,5 @@
 const db = require("../../firebase/config/firebase.js").firestore();
+const FieldValue = require("firebase-admin").firestore.FieldValue;
 
 module.exports = {
   addTrip,
@@ -45,7 +46,16 @@ function appendDestination(tripId, destination) {
   return db
     .collection("trips")
     .doc(`${tripId}`)
-    .update({ destinations: destination }, { merge: true })
+    .update({ destinations: FieldValue.arrayUnion(destination) })
+    .then(res => res)
+    .catch(err => err);
+}
+
+function removeDestination(tripId, destination) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .update({ destinations: FieldValue.arrayRemove(destination) })
     .then(res => res)
     .catch(err => err);
 }
