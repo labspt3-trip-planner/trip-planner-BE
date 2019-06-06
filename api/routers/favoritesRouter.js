@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const fave = require("../../database/favorites/faveHelpers.js");
+const { fave } = require("../../database");
 
 router.post("/", async (req, res) => {
   const favorite = req.body;
@@ -34,6 +34,18 @@ router.put("/:userId", async (req, res) => {
   try {
     const favorited = await fave.addToUser(userId, favId);
     res.status(201).json(favorited);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Could not process request" });
+  }
+});
+
+router.delete("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const { favId } = req.body;
+  try {
+    const deleted = await fave.delFromUser(userId, favId);
+    res.status(201).json(deleted);
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: "Could not process request" });

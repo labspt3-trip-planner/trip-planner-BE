@@ -3,7 +3,8 @@ const FieldValue = require("firebase-admin").firestore.FieldValue;
 module.exports = {
   add,
   getById,
-  addToUser
+  addToUser,
+  delFromUser
 };
 
 function add(favorite) {
@@ -29,5 +30,14 @@ async function addToUser(uid, favId) {
 
   return user.update({
     favorites: FieldValue.arrayUnion(favorite)
+  });
+}
+
+async function delFromUser(uid, favId) {
+  const user = await db.collection("users").doc(`${uid}`);
+  const favorite = await db.collection("favorites").doc(`${favId}`);
+
+  return user.update({
+    favorites: FieldValue.arrayRemove(favorite)
   });
 }
