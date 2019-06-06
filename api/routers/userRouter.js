@@ -43,6 +43,7 @@ function deleteUser(uid) {
     .catch(function(error) {
       console.log("Error deleting user:", error);
     });
+    
 }
 
 // Update user firebase method
