@@ -10,11 +10,11 @@ module.exports = {
 };
 
 function addUser(userInfo) {
-  const { uid, email, passwordHash } = userInfo;
+  const { uid, email } = userInfo;
   return db
     .collection("users")
     .doc(uid.toString())
-    .set({ email, passwordHash });
+    .set({ email });
 }
 
 function getByUid(uid) {
