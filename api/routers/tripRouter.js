@@ -155,6 +155,26 @@ router.put("/:tripId/lists/:itemId", async (req, res) => {
   }
 });
 
+//delete list item
+router.delete("/:tripId/lists/:itemId", async (req, res) => {
+  const { tripId, itemId } = req.params;
+
+  try {
+    await list.removeItem(tripId, itemId);
+    const stillThere = await list.getById(tripId, itemId);
+    console.log(stillThere);
+    if (!stillThere) {
+      res.status(200).json(1);
+    } else {
+      res.status(400).json(0);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
+});
+
 //remove destination from trip
 router.delete("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
