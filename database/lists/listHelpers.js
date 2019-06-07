@@ -3,7 +3,8 @@ const db = require("../../firebase/config/firebase.js").firestore();
 module.exports = {
   addItem,
   getAllItems,
-  getByListName
+  getByListName,
+  editItem
 };
 
 function addItem(tripId, { item, checked, listName }) {
@@ -49,4 +50,15 @@ function getByListName(tripId, listName) {
       snapshot.forEach(doc => l.push(doc.data()));
       return l;
     });
+}
+
+function editItem(tripId, itemId, changes) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .collection("lists")
+    .doc(`${itemId}`)
+    .update(changes)
+    .then(res => 1)
+    .catch(err => 0);
 }
