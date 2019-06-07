@@ -27,9 +27,9 @@ function getByName(name) {
       }
       const destinations = [];
       snapshot.forEach(doc => {
-        destinations.push(doc);
+        destinations.push(doc.ref);
       });
-      return destinations[0].ref;
+      return destinations[0];
     })
     .catch(err => console.log("getByName: ", err));
 }
