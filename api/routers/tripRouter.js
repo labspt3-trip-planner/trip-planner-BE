@@ -105,6 +105,20 @@ router.post("/:tripId/lists", async (req, res) => {
   }
 });
 
+//get all list items for trip
+router.get("/:tripId/lists", async (req, res) => {
+  const { tripId } = req.params;
+  try {
+    const everything = await list.getAllItems(tripId);
+    console.log(everything);
+    res.status(200).json(everything);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
+});
+
 //remove destination from trip
 router.delete("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
