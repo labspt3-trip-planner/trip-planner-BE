@@ -1,13 +1,13 @@
 const router = require("express").Router();
 
-const trip = require("../../database/trips/tripsHelper.js");
-const dest = require("../../database/destinations/destinationHelper.js");
+const { trip, dest } = require("../../database");
 
+//add a trip
 router.post("/", async (req, res) => {
-  const trip = req.body;
+  const addition = req.body;
   try {
-    if (trip.destination && trip.name && trip.planner) {
-      const tripId = await trip.addTrip(trip);
+    if (addition.destination && addition.name && addition.planner) {
+      const tripId = await trip.addTrip(addition);
       console.log(tripId);
       const returnTrip = await trip.getTripById(tripId);
       console.log(returnTrip);
@@ -21,14 +21,22 @@ router.post("/", async (req, res) => {
   }
 });
 
+//get trip by ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await trip.getTripById(id);
-    const whereTo = await result.destinations
-      .get()
-      .then(res => res.data())
-      .catch(err => console.log(err));
+    console.log(result);
+    const whereTo = [];
+    for (i of result.destinations) {
+      let gotIt = await dest.getById(i.id);
+      whereTo.push({ name: gotIt.name, destId: i.id });
+    }
+
+    console.log("Where To: ", whereTo);
+    // .get()
+    // .then(res => res.data())
+    // .catch(err => console.log(err));
     if (result) {
       res.status(200).json({ ...result, destinations: whereTo });
     } else {
@@ -42,6 +50,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//edit trip by id
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
@@ -60,6 +69,8 @@ router.put("/:id", async (req, res) => {
       .json({ err: "There was a problem processing your request" });
   }
 });
+
+//Add destination to a trip
 router.put("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
   const id = req.params.tripId;
@@ -78,7 +89,19 @@ router.put("/:tripId/destinations", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//remove destination from trip
+router.delete("/:tripId/destinations", async (req, res) => {
+  const destination = req.body;
+  const id = req.params.tripId;
+  try {
+    const removed = await trip.removeDestination(tripId, destination);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
+//delete trip
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
