@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { trip, dest } = require("../../database");
+const { trip, dest, list } = require("../../database");
 
 //add a trip
 router.post("/", async (req, res) => {
@@ -27,17 +27,13 @@ router.get("/:id", async (req, res) => {
   try {
     const result = await trip.getTripById(id);
     console.log(result);
-    const whereTo = [];
-    for (i of result.destinations) {
-      let gotIt = await dest.getById(i.id);
-      whereTo.push({ name: gotIt.name, destId: i.id });
-    }
 
-    console.log("Where To: ", whereTo);
-    // .get()
-    // .then(res => res.data())
-    // .catch(err => console.log(err));
     if (result) {
+      const whereTo = [];
+      for (i of result.destinations) {
+        let gotIt = await dest.getById(i.id);
+        whereTo.push({ name: gotIt.name, destId: i.id });
+      }
       res.status(200).json({ ...result, destinations: whereTo });
     } else {
       res.status(404).json({ error: "Trip not found" });
@@ -75,11 +71,14 @@ router.put("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
   const id = req.params.tripId;
   try {
+    //check if destination is in collecttion
     const isItThere = await dest.getByName(destination.name);
     if (isItThere) {
+      //add existing dest doc reference to destinations array
       await trip.appendDestination(id, isItThere);
       res.status(201).json({ message: "Destination set" });
     } else {
+      //add destination to collection, and then add reference to destinations array
       const newDest = await dest.add(destination);
       const success = await trip.appendDestination(id, newDest);
       res.status(201).json({ message: "Destination added and set" });
@@ -89,6 +88,23 @@ router.put("/:tripId/destinations", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+//add list item to trip
+router.post("/:tripId/lists", async (req, res) => {
+  const { tripId } = req.params;
+  const item = req.body;
+
+  try {
+    const added = await list.addItem(tripId, item);
+    console.log("Added :", added);
+    res.status(201).json(added);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
+});
+
 //remove destination from trip
 router.delete("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
