@@ -43,7 +43,6 @@ function deleteUser(uid) {
     .catch(function(error) {
       console.log("Error deleting user:", error);
     });
-    
 }
 
 // Update user firebase method
@@ -89,7 +88,7 @@ router.get("/:uid/trips", async (req, res) => {
   const { uid } = req.params;
   try {
     const trips = await getTripsByUser(uid);
-    console.log(trips);
+    console.log("trips: ", trips);
     if (trips.length) {
       res.status(200).json(trips);
     } else {
