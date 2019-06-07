@@ -119,6 +119,22 @@ router.get("/:tripId/lists", async (req, res) => {
   }
 });
 
+router.get("/:tripId/lists/:listName", async (req, res) => {
+  const { tripId, listName } = req.params;
+  try {
+    const getEm = await list.getByListName(tripId, listName);
+    if (getEm) {
+      res.status(200).json(getEm);
+    } else {
+      res.status(404).json({ err: "No list by that name" });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
+});
+
 //remove destination from trip
 router.delete("/:tripId/destinations", async (req, res) => {
   const destination = req.body;
