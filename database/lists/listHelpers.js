@@ -2,9 +2,11 @@ const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
   addItem,
+  getById,
   getAllItems,
   getByListName,
-  editItem
+  editItem,
+  removeItem
 };
 
 function addItem(tripId, { item, checked, listName }) {
@@ -15,6 +17,17 @@ function addItem(tripId, { item, checked, listName }) {
     .add({ item, checked, listName: `${listName.toLowerCase()}` })
     .then(res => res.id)
     .catch(err => err);
+}
+
+function getById(tripId, itemId) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .collection("lists")
+    .doc(`${itemId}`)
+    .get()
+    .then(res => res.data())
+    .catch(err => 0);
 }
 
 function getAllItems(tripId) {
