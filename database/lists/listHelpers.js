@@ -83,18 +83,7 @@ function removeItem(tripId, itemId) {
     .collection("lists")
     .doc(`${itemId}`)
     .get()
-    .then(doc => {
-      doc.ref
-        .delete()
-        .then(res => {
-          console.log(res);
-          return 1;
-        })
-        .catch(err => {
-          console.log(err);
-          return 0;
-        });
-    })
+    .then(doc => 1)
     .catch(err => {
       console.log(err);
       return 0;
