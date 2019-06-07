@@ -72,13 +72,21 @@ function removeUser(uid) {
     .delete();
 }
 
-async function getTripsByUser(uid) {
-  const trips = [];
-  await db
+function getTripsByUser(uid) {
+  return db
     .collection("trips")
-    .where("planner", "==", `${uid}`)
+    .where("planner", "==", uid)
     .get()
-    .then(snapshot => snapshot.forEach(trip => trips.push(trip.data())))
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log("No matching document");
+        return 0;
+      }
+      const trips = [];
+      snapshot.forEach(doc => {
+        trips.push(doc.data());
+      });
+      return trips;
+    })
     .catch(err => console.log(err));
-  return trips;
 }
