@@ -75,3 +75,28 @@ function editItem(tripId, itemId, changes) {
     .then(res => 1)
     .catch(err => 0);
 }
+
+function removeItem(tripId, itemId) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .collection("lists")
+    .doc(`${itemId}`)
+    .get()
+    .then(doc => {
+      doc.ref
+        .delete()
+        .then(res => {
+          console.log(res);
+          return 1;
+        })
+        .catch(err => {
+          console.log(err);
+          return 0;
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      return 0;
+    });
+}
