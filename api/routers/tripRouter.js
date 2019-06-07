@@ -118,7 +118,7 @@ router.get("/:tripId/lists", async (req, res) => {
       .json({ err: "There was a problem processing your request" });
   }
 });
-
+//get all items by list name
 router.get("/:tripId/lists/:listName", async (req, res) => {
   const { tripId, listName } = req.params;
   try {
@@ -127,6 +127,26 @@ router.get("/:tripId/lists/:listName", async (req, res) => {
       res.status(200).json(getEm);
     } else {
       res.status(404).json({ err: "No list by that name" });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
+});
+
+//edit list item
+router.put("/:tripId/lists/:itemId", async (req, res) => {
+  const { tripId, itemId } = req.params;
+  const changes = req.body;
+
+  try {
+    const edited = await list.editItem(tripId, itemId, changes);
+    console.log(edited);
+    if (!edited) {
+      res.status(404).json({ err: "Item not found" });
+    } else {
+      res.status(201).json(1);
     }
   } catch (err) {
     res
