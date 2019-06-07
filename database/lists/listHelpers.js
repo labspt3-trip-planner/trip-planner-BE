@@ -2,7 +2,8 @@ const db = require("../../firebase/config/firebase.js").firestore();
 
 module.exports = {
   addItem,
-  getAllItems
+  getAllItems,
+  getByListName
 };
 
 function addItem(tripId, { item, checked, listName }) {
@@ -10,7 +11,7 @@ function addItem(tripId, { item, checked, listName }) {
     .collection("trips")
     .doc(`${tripId}`)
     .collection("lists")
-    .add({ item, checked, listName })
+    .add({ item, checked, listName: `${listName.toLowerCase()}` })
     .then(res => res.id)
     .catch(err => err);
 }
@@ -30,4 +31,22 @@ function getAllItems(tripId) {
       return items;
     })
     .catch(err => console.log(err));
+}
+
+function getByListName(tripId, listName) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .collection("lists")
+    .where("listName", "==", `${listName}`)
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log("There are no matching documents");
+        return;
+      }
+      const l = [];
+      snapshot.forEach(doc => l.push(doc.data()));
+      return l;
+    });
 }
