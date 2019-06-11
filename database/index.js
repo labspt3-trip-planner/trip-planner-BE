@@ -4,4 +4,6 @@ const trip = require("./trips/tripsHelper.js");
 const user = require("./users/usersHelper.js");
 const list = require("./lists/listHelpers.js");
 
+
+
 module.exports = { dest, fave, trip, user, list };
