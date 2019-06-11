@@ -10,6 +10,9 @@ const {
 
 const firebase = require("../../firebase/config/firebase").auth();
 
+
+
+
 //firebase methods list all users
 function listAllUsers(nextPageToken) {
   // List batch of users 1000 at a time.
