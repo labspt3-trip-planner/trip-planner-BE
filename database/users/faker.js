@@ -5,8 +5,9 @@ const User = {
 	password: faker.internet.password()
 };
 const a = new Array(500)
-	.fill(null)
-	.map(a => (e = faker.fake('{{internet.email}}, {{internet.password}}')));
-console.log(a);
+  .fill(null)
+  .map(e => (e = faker.fake("{{internet.email}}, {{internet.password}}")));
+console.log(User);
+
 
 module.exports = User;
