@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const cool = require("cool-ascii-faces");
-const User = require('../database/users/faker');
+const a = require('../database/users/faker');
 
 const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
@@ -27,7 +27,7 @@ server.get("/", async (req, res) => {
 
 // testing faker endpoint
 server.get('/faker', (req, res) => {
-  res.json(User)
+  res.json(a)
 })
 
 // deployment check
