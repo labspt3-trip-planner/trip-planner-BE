@@ -7,7 +7,8 @@ const User = {
 const a = new Array(500)
   .fill(null)
   .map(e => (e = faker.fake("{{internet.email}}, {{internet.password}}")));
-console.log(a);
+
+  // add a console.log for a to generate 500 users in the console and Postman
 
 
 module.exports = a;
