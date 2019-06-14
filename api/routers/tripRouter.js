@@ -48,10 +48,12 @@ router.get("/:id", async (req, res) => {
 
     if (result) {
       const whereTo = [];
-      for (i of result.destinations) {
-        let gotIt = await dest.getById(i.id);
-        whereTo.push({ name: gotIt.name, destId: i.id });
-      }
+      if (Array.isArray(result.destinations)) {
+        for (i of result.destinations) {
+          let gotIt = await dest.getById(i.id);
+          whereTo.push({ name: gotIt.name, destId: i.id, geo: gotIt.geo });
+        }
+      } else whereTo.push(result.destinations);
       res.status(200).json({ ...result, destinations: whereTo });
     } else {
       res.status(404).json({ error: "Trip not found" });
