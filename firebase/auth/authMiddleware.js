@@ -15,7 +15,7 @@ async function verifyToken(req, res, next) {
     }
   } catch (e) {
     console.log(e);
-    return res.status(401).send("Not an authorized user");
+    return res.status(401).send(e.errorInfo);
   }
 }
 

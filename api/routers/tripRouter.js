@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const restricted = require("../../firebase/auth/authMiddleware");
 const { trip, dest, list } = require("../../database");
 
 router.post("/", async (req, res) => {
@@ -40,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 //get trip by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", restricted, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await trip.getTripById(id);
