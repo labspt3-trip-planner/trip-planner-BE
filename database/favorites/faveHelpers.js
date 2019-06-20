@@ -4,7 +4,7 @@ module.exports = {
   add,
   getById,
   addToTrip,
-  delFromUser
+  delFromTrip
 };
 
 function add(favorite) {
