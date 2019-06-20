@@ -3,7 +3,7 @@ const FieldValue = require("firebase-admin").firestore.FieldValue;
 module.exports = {
   add,
   getById,
-  addToUser,
+  addToTrip,
   delFromUser
 };
 
@@ -23,21 +23,23 @@ function getById(id) {
     .then(res => res.data())
     .catch(err => err);
 }
-//Adds reference to "favorites" doc at favId to favorites array in user doc
-async function addToUser(uid, favId) {
-  const user = await db.collection("users").doc(`${uid}`);
-  const favorite = await db.collection("favorites").doc(`${favId}`);
-
-  return user.update({
-    favorites: FieldValue.arrayUnion(favorite)
+//Adds data from document to favorites array in trip doc
+async function addToTrip(tripId, favoriteId) {
+  const trip = await db.collection("trips").doc(`${tripId}`);
+  const addition = await db
+    .collection("favorites")
+    .doc(`${favoriteId}`)
+    .get();
+  return trip.update({
+    favorites: FieldValue.arrayUnion(addition.data())
   });
 }
 
-async function delFromUser(uid, favId) {
-  const user = await db.collection("users").doc(`${uid}`);
-  const favorite = await db.collection("favorites").doc(`${favId}`);
+async function delFromTrip(tripId, favoriteId) {
+  const user = await db.collection("trips").doc(`${tripId}`);
+  const favorite = await db.collection("favorites").doc(`${favoriteId}`);
 
   return user.update({
-    favorites: FieldValue.arrayRemove(favorite)
+    favorites: FieldValue.arrayRemove(favorite.data())
   });
 }
