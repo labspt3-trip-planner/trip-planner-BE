@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 //get trip by ID
-router.get("/:id", restricted, async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await trip.getTripById(id);
@@ -102,7 +102,7 @@ router.put("/:tripId/destinations", async (req, res) => {
       //add destination to collection, and then add reference to destinations array
       const newDest = await dest.add(destination);
       const success = await trip.appendDestination(id, newDest);
-      res.status(201).json({ message: "Destination added and set" });
+      res.status(201).json({ success });
     }
   } catch (err) {
     console.log(err);

@@ -2,11 +2,17 @@ const router = require("express").Router();
 
 const { fave } = require("../../database");
 
-router.post("/", async (req, res) => {
+//post favorite data from frontend to trip favorites array
+router.post("/:tripId", async (req, res) => {
   const favorite = req.body;
+  const { tripId } = req.params;
   try {
-    const added = await fave.add(favorite);
-    res.status(201).json({ id: added });
+    if (favorite.geometry.location) {
+      const added = await fave.add(favorite);
+      console.log("added: ", added);
+      await fave.addToTrip(tripId, added);
+      res.status(201).json({ id: added });
+    } else res.status(400).json({ error: "Please provide a location" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "something went wrong" });
