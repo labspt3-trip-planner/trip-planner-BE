@@ -6,7 +6,8 @@ module.exports = {
   getTripById,
   updateTrip,
   removeTrip,
-  appendDestination
+  appendDestination,
+  removeDestination
 };
 
 function addTrip(trip) {

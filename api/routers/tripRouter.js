@@ -3,41 +3,73 @@ const router = require("express").Router();
 const restricted = require("../../firebase/auth/authMiddleware");
 const { trip, dest, list } = require("../../database");
 
+// router.post("/", async (req, res) => {
+//   const { destination, name, planner } = req.body;
+//   //checks for required fields
+//   if (destination && name && planner) {
+//     try {
+//       //checks to see if destination exists in collection
+//       const getDest = await dest.getByName(destination);
+//       //gets reference to existing document and adds it to post object
+//       if (getDest) {
+//         const tripId = await trip.addTrip({
+//           name,
+//           planner,
+//           destinations: [getDest]
+//         });
+//         res.status(201).json(tripId);
+//       } else {
+//         //adds new destination to collection, and gets reference to add to post object
+//         const newDest = await dest.add({ name: destination });
+//         const tripId = await trip.addTrip({
+//           name,
+//           planner,
+//           destinations: [newDest]
+//         });
+//         res.status(201).json(tripId);
+//       }
+//     } catch (err) {
+//       console.log(err);
+//       res
+//         .status(500)
+//         .json({ err: "There was a problem processing your request" });
+//     }
+//   } else
+//     res
+//       .status(400)
+//       .json({ err: "Please include name, destination, and planner" });
+// });
+
+//new add trip endpoint
+// Add new trip to DB 'trips' collection
 router.post("/", async (req, res) => {
-  const { destination, name, planner } = req.body;
-  //checks for required fields
-  if (destination && name && planner) {
-    try {
-      //checks to see if destination exists in collection
-      const getDest = await dest.getByName(destination);
-      //gets reference to existing document and adds it to post object
-      if (getDest) {
-        const tripId = await trip.addTrip({
-          name,
-          planner,
-          destinations: [getDest]
-        });
-        res.status(201).json(tripId);
-      } else {
-        //adds new destination to collection, and gets reference to add to post object
-        const newDest = await dest.add({ name: destination });
-        const tripId = await trip.addTrip({
-          name,
-          planner,
-          destinations: [newDest]
-        });
-        res.status(201).json(tripId);
-      }
-    } catch (err) {
-      console.log(err);
-      res
-        .status(500)
-        .json({ err: "There was a problem processing your request" });
-    }
-  } else
+  try {
+    const {
+      tripName,
+      destinations,
+      startDate,
+      endDate
+      // planner,
+      // participants
+    } = req.body;
+    const newTrip = {
+      tripName,
+      destinations,
+      startDate,
+      endDate,
+      // planner,
+      // participants,
+      favorites: []
+    };
+    const addedTrip = await trip.addTrip(newTrip);
+    console.log(addedTrip);
+    res.status(201).json({ "New trip id": addedTrip });
+  } catch (err) {
+    console.log(err);
     res
-      .status(400)
-      .json({ err: "Please include name, destination, and planner" });
+      .status(500)
+      .json({ err: "There was a problem processing your request" });
+  }
 });
 
 //get trip by ID
