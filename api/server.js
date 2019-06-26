@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const cool = require("cool-ascii-faces");
 const a = require('../database/users/faker');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
