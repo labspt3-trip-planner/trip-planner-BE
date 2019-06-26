@@ -48,17 +48,17 @@ router.post("/", async (req, res) => {
       tripName,
       destinations,
       startDate,
-      endDate
-      // planner,
-      // participants
+      endDate,
+      planner,
+      participants
     } = req.body;
     const newTrip = {
       tripName,
       destinations,
       startDate,
       endDate,
-      // planner,
-      // participants,
+      planner,
+      participants,
       favorites: []
     };
     const addedTrip = await trip.addTrip(newTrip);
@@ -80,14 +80,7 @@ router.get("/:id", async (req, res) => {
     console.log(result);
 
     if (result) {
-      const whereTo = [];
-      if (Array.isArray(result.destinations)) {
-        for (i of result.destinations) {
-          let gotIt = await dest.getById(i.id);
-          whereTo.push({ name: gotIt.name, destId: i.id, geo: gotIt.geo });
-        }
-      } else whereTo.push(result.destinations);
-      res.status(200).json({ ...result, destinations: whereTo });
+      res.status(200).json(result);
     } else {
       res.status(404).json({ error: "Trip not found" });
     }
