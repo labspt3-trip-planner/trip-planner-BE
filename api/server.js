@@ -36,4 +36,14 @@ server.get("/cool", (req, res) => {
   res.send(cool());
 });
 
+// stripe test API request
+(async () => {
+  const charge = await stripe.charges.create({
+    amount: 20,
+    currency: 'usd',
+    source: 'tok_visa',
+    receipt_email: 'theiseja@gmail.com'
+  });
+});
+
 module.exports = server;
