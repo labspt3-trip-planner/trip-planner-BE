@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const cool = require("cool-ascii-faces");
-const a = require('../database/users/faker');
+const a = require("../database/users/faker");
 
 const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
@@ -25,10 +25,14 @@ server.get("/", async (req, res) => {
   res.send(`Welcome to the Trip Planner API!`);
 });
 
-// testing faker endpoint
-server.get('/faker', (req, res) => {
-  res.json(a)
+server.get("/document", (req, res) => {
+  res.send("This is an endpoint")
 })
+
+// testing faker endpoint
+server.get("/faker", (req, res) => {
+  res.json(a);
+});
 
 // deployment check
 server.get("/cool", (req, res) => {
