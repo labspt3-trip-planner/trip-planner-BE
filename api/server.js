@@ -43,7 +43,7 @@ server.get('/products/:uuid', (req, res, next) => {
   return res.send('Product does not exist in our database.');
 });
 
-server.post('/users/charge', (req, res, next) => {
+server.post('/user/checkout', (req, res, next) => {
   const stripeToken = req.body.stripeToken;
   const price = req.body.price;
   const amount = req.body.price * 100;
