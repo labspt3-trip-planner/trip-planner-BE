@@ -42,14 +42,14 @@ const { trip, dest, list } = require("../../database");
 
 //new add trip endpoint
 // Add new trip to DB 'trips' collection
-router.post("/", async (req, res) => {
+router.post("/", restricted, async (req, res) => {
   try {
+    const planner = req.body.uid
     const {
       tripName,
       destinations,
       startDate,
       endDate,
-      planner,
       participants
     } = req.body;
     const newTrip = {
