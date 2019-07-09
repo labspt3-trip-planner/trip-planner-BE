@@ -10,8 +10,7 @@ const {
 
 const firebase = require("../../firebase/config/firebase").auth();
 
-
-
+const restricted = require("../../firebase/auth/authMiddleware.js");
 
 //firebase methods list all users
 function listAllUsers(nextPageToken) {
@@ -21,7 +20,7 @@ function listAllUsers(nextPageToken) {
     .then(function(listUsersResult) {
       const userList = [];
       listUsersResult.users.forEach(function(userRecord) {
-        console.log("user", userRecord.toJSON());
+        // console.log("user", userRecord.toJSON());
         userList.push({ uid: userRecord.uid, email: userRecord.email });
       });
       if (listUsersResult.pageToken) {
@@ -55,6 +54,7 @@ function deleteUser(uid) {
 // get all users
 router.get("/all", async (req, res) => {
   try {
+    console.log("this works")
     const userList = await listAllUsers();
     if (userList) {
       res.status(200).json(userList);
@@ -68,7 +68,7 @@ router.get("/all", async (req, res) => {
 });
 
 // get user by ID
-router.get("/:uid", (req, res) => {
+router.get("/user/:uid", (req, res) => {
   const { uid } = req.params;
 
   getByUid(`${uid}`)
@@ -86,9 +86,10 @@ router.get("/:uid", (req, res) => {
     });
 });
 
-// GET trip by a UID
-router.get("/:uid/trips", async (req, res) => {
-  const { uid } = req.params;
+// // GET trips by a UID
+router.get("/alltrips",  restricted, async (req, res) => {
+  const { uid } = req.body;
+  console.log(uid);
   try {
     const trips = await getTripsByUser(uid);
     console.log("trips: ", trips);
@@ -103,7 +104,7 @@ router.get("/:uid/trips", async (req, res) => {
   }
 });
 
-// DELETE endpoint delete a user
+// // DELETE endpoint delete a user
 router.delete("/delete/:uid", async (req, res) => {
   const uid = req.params;
   try {
@@ -122,7 +123,7 @@ router.delete("/delete/:uid", async (req, res) => {
   }
 });
 
-// PUT endpoint update user info
+// // PUT endpoint update user info
 router.put("/edit/:uid", async (req, res) => {
   const { uid } = req.params;
   const changes = req.body;

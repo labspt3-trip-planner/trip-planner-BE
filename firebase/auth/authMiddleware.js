@@ -2,8 +2,9 @@ const admin = require("../config/firebase");
 
 async function verifyToken(req, res, next) {
   const userToken = req.headers.authorization;
-
+  console.log("middleware");
   try {
+    console.log(userToken)
     const decodedToken = await admin.auth().verifyIdToken(userToken);
 
     if (decodedToken) {

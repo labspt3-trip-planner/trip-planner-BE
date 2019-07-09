@@ -84,7 +84,9 @@ function getTripsByUser(uid) {
       }
       const trips = [];
       snapshot.forEach(doc => {
-        trips.push(doc.data());
+        const trip = doc.data();
+        trip.tripId = doc.id;
+        trips.push(trip);
       });
       return trips;
     })
