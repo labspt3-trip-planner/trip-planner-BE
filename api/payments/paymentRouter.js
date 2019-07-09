@@ -2,10 +2,11 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);  // stripe secr
 const router = require('express').Router();
 
 const stripeToken = require('stripe')(process.env.SERVER_STRIPE_TOKEN);
-const { subPlans, subPrices } = require('./paymentHelper');
+const subPlans = ['premium'];  // can be changed
+const subPrices = ['$9.99/yr']; // can be changed
   
 
-router.post('/checkout', subPlans, subPrices, stripeToken,(req, res) => {
+router.post('/checkout', subPlans, subPrices, stripeToken,(req, res) =>  {
     const stripeToken = req.body.data.stripeToken;
     const payment = Number(req.body.data.payment);
     const subPlans = req.body.data.description;
