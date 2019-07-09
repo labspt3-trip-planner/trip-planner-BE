@@ -8,6 +8,8 @@ const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
 const tripRouter = require("./routers/tripRouter");
 const favesRouter = require("./routers/favoritesRouter.js");
+const paymentRouter = require('./payments/paymentRouter');
+
 
 const server = express();
 
@@ -19,6 +21,7 @@ server.use("/auth", authRouter);
 server.use("/users", userRouter);
 server.use("/trip", tripRouter);
 server.use("/favorites", favesRouter);
+server.use("/payment", paymentRouter);
 
 // just makes sure the server is live and running
 server.get("/", async (req, res) => {
