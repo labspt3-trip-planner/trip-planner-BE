@@ -8,7 +8,7 @@ const authRouter = require("./routers/authRouter.js");
 const userRouter = require("./routers/userRouter");
 const tripRouter = require("./routers/tripRouter");
 const favesRouter = require("./routers/favoritesRouter.js");
-const paymentRouter = require("./routers/paymentRouter");
+const paymentRouter = require("./stripe/paymentRouter");
 
 
 const server = express();
