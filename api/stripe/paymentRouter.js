@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);  // stripe secret key, I can provide account info if needed.
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);  // stripe secret key, I can provide key info if needed.
 const router = require('express').Router();
   
 
