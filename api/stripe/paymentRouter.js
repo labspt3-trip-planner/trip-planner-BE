@@ -12,10 +12,10 @@ console.log(req.body)
     (async () => {
         try {
             const charge = await stripe.charges.create({
-                amount: payment,
+                amount: Number(req.body.data.payment),
                 currency: 'usd',
-                source: stripe,
-                receipt_email: email
+                source: req.body.data.stripeToken,
+                receipt_email: req.body.data.email
             });
             res.status(201).json([{ charge }]);
         } catch (err) {
