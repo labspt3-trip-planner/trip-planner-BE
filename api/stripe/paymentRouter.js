@@ -8,7 +8,6 @@ router.get("/", (req, res) => {  // Here just to see if it works
   
 
 router.post('/checkout', (req, res) =>  {
-console.log(req.body)
     (async () => {
         try {
             const charge = await stripe.charges.create({
