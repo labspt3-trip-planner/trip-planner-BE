@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const admin = require("../../firebase/config/firebase");
 
 const { registerUser } = require("../../firebase/auth/authHelpers.js");
 const {
@@ -29,17 +30,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    // login user
-    const login = await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Failed to login" });
-  }
+router.post("/login", (req, res) => {
+  res.status(200);
 });
 
 module.exports = router;
