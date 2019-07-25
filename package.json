@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --watch --verbose",
     "start": "node index.js",
     "server": "nodemon"
   },
@@ -22,7 +22,8 @@
     "node": "^12.2.0",
     "nodemon": "^1.19.0",
     "request-promise": "^4.2.4",
-    "stripe": "^7.3.0"
+    "stripe": "^7.3.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "jest": "^24.8.0"
