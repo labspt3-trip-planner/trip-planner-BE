@@ -1,7 +1,6 @@
 const request = require('supertest');
 const server = require('../api/server');
 
-
 describe('../api/server.js', () => {
     describe('main route', () => {
         it('should return a 200 status code from the index route', async () => {
@@ -25,5 +24,3 @@ describe('../api/server.js', () => {
         })
     })
 });
-
-module.exports = server;

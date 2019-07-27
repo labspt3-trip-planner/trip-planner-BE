@@ -25,7 +25,7 @@ server.use("/payments", paymentRouter);
 
 // just makes sure the server is live and running
 server.get("/", async (req, res) => {
-  res.send(`Welcome to the Trip Planner API!`);
+  res.status(200).json(`Welcome to the Trip Planner API!`);
 });
 
 server.get("/document", (req, res) => {
