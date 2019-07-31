@@ -1,91 +1,101 @@
 const db = require("../../firebase/config/firebase.js").firestore();
+const FieldValue = require("firebase-admin").firestore.FieldValue;
 
 module.exports = {
-  addItem,
-  getById,
-  getAllItems,
-  getByListName,
-  editItem,
-  removeItem
+  addTodo,
+  addPacking,
+  removeTodo,
+  removePacking,
+  checkTodo,
+  checkPacking
 };
 
-function addItem(tripId, { item, checked, listName }) {
+// function addItem(tripId, { item, checked, listName }) {
+//   return db
+//     .collection("trips")
+//     .doc(`${tripId}`)
+//     .collection("lists")
+//     .add({ item, checked, listName: `${listName.toLowerCase()}` })
+//     .then(res => res.id)
+//     .catch(err => err);
+// }
+
+function addTodo(tripId, todo) {
   return db
     .collection("trips")
     .doc(`${tripId}`)
-    .collection("lists")
-    .add({ item, checked, listName: `${listName.toLowerCase()}` })
-    .then(res => res.id)
+    .update({ todos: FieldValue.arrayUnion(todo) })
+    .then(res => res)
     .catch(err => err);
 }
 
-function getById(tripId, itemId) {
+function addPacking(tripId, packing) {
   return db
     .collection("trips")
     .doc(`${tripId}`)
-    .collection("lists")
-    .doc(`${itemId}`)
-    .get()
-    .then(res => res.data())
-    .catch(err => 0);
+    .update({ packing: FieldValue.arrayUnion(packing) })
+    .then(res => res)
+    .catch(err => err);
 }
 
-function getAllItems(tripId) {
+function removeTodo(tripId, todo) {
   return db
     .collection("trips")
     .doc(`${tripId}`)
-    .collection("lists")
-    .get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        console.log("There are no matching documents");
-      }
-      const items = [];
-      snapshot.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
-      return items;
+    .update({ todos: FieldValue.arrayRemove(todo) })
+    .then(res => res)
+    .catch(err => err);
+}
+
+function removePacking(tripId, pack) {
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .update({ packing: FieldValue.arrayRemove(pack) })
+    .then(res => res)
+    .catch(err => err);
+}
+
+function checkTodo(tripId, todo) {
+  console.log("DB Helper todo log: ", todo);
+  return db
+    .collection("trips")
+    .doc(`${tripId}`)
+    .update({
+      todos: FieldValue.arrayRemove({ item: todo.item, done: !todo.done })
     })
-    .catch(err => console.log(err));
+    .then(res =>
+      db
+        .collection("trips")
+        .doc(`${tripId}`)
+        .update({ todos: FieldValue.arrayUnion(todo) })
+        .then(res => {
+          console.log("Second success: ", res);
+          return res;
+        })
+        .catch(err => err)
+    )
+    .catch(err => err);
 }
 
-function getByListName(tripId, listName) {
+function checkPacking(tripId, pack) {
+  console.log("DB Helper packing log: ", pack);
   return db
     .collection("trips")
     .doc(`${tripId}`)
-    .collection("lists")
-    .where("listName", "==", `${listName}`)
-    .get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        console.log("There are no matching documents");
-        return;
-      }
-      const l = [];
-      snapshot.forEach(doc => l.push(doc.data()));
-      return l;
-    });
-}
-
-function editItem(tripId, itemId, changes) {
-  return db
-    .collection("trips")
-    .doc(`${tripId}`)
-    .collection("lists")
-    .doc(`${itemId}`)
-    .update(changes)
-    .then(res => 1)
-    .catch(err => 0);
-}
-
-function removeItem(tripId, itemId) {
-  return db
-    .collection("trips")
-    .doc(`${tripId}`)
-    .collection("lists")
-    .doc(`${itemId}`)
-    .get()
-    .then(doc => 1)
-    .catch(err => {
-      console.log(err);
-      return 0;
-    });
+    .update({
+      packing: FieldValue.arrayRemove({ item: pack.item, done: !pack.done })
+    })
+    .then(res =>
+      db
+        .collection("trips")
+        .doc(`${tripId}`)
+        .update({ packing: FieldValue.arrayUnion(pack) })
+        .then(res => {
+          console.log("Second success: ", res);
+          return res;
+        })
+        .catch(err => err)
+    )
+    .catch(err => err);
 }

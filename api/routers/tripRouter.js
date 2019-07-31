@@ -44,7 +44,7 @@ const { trip, dest, list } = require("../../database");
 // Add new trip to DB 'trips' collection
 router.post("/", restricted, async (req, res) => {
   try {
-    const planner = req.body.uid
+    const planner = req.body.uid;
     const {
       tripName,
       destinations,
@@ -59,7 +59,9 @@ router.post("/", restricted, async (req, res) => {
       endDate,
       planner,
       participants,
-      favorites: []
+      favorites: [],
+      packing: [],
+      todos: []
     };
     const addedTrip = await trip.addTrip(newTrip);
     console.log(addedTrip);
@@ -73,7 +75,7 @@ router.post("/", restricted, async (req, res) => {
 });
 
 //get trip by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", restricted, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await trip.getTripById(id);
@@ -93,7 +95,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //edit trip by id
-router.put("/:id", async (req, res) => {
+router.put("/:id", restricted, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   try {
@@ -135,89 +137,91 @@ router.put("/:tripId/destinations", async (req, res) => {
   }
 });
 
-//add list item to trip
-router.post("/:tripId/lists", async (req, res) => {
+//add todo item to todo list
+router.post("/:tripId/todos", async (req, res) => {
   const { tripId } = req.params;
-  const item = req.body;
+  const todo = req.body;
 
   try {
-    const added = await list.addItem(tripId, item);
-    console.log("Added :", added);
-    res.status(201).json(added);
+    const added = await list.addTodo(tripId, todo);
+    console.log("Added todo: ", added);
+    res.status(201).json({ message: "succesful addition" });
   } catch (err) {
+    console.log("router.put todos: ", err);
     res
       .status(500)
-      .json({ err: "There was a problem processing your request" });
+      .json({ message: "There is a problem processing request", error: err });
   }
 });
 
-//get all list items for trip
-router.get("/:tripId/lists", async (req, res) => {
+//add packing item to packing list
+router.post("/:tripId/packing", async (req, res) => {
   const { tripId } = req.params;
+  const pack = req.body;
+
   try {
-    const everything = await list.getAllItems(tripId);
-    console.log(everything);
-    res.status(200).json(everything);
+    const added = await list.addPacking(tripId, pack);
+    console.log("Added packing: ", added);
+    res.status(201).json({ message: "succesful addition" });
   } catch (err) {
+    console.log("router.put packing: ", err);
     res
       .status(500)
-      .json({ err: "There was a problem processing your request" });
-  }
-});
-//get all items by list name
-router.get("/:tripId/lists/:listName", async (req, res) => {
-  const { tripId, listName } = req.params;
-  try {
-    const getEm = await list.getByListName(tripId, listName);
-    if (getEm) {
-      res.status(200).json(getEm);
-    } else {
-      res.status(404).json({ err: "No list by that name" });
-    }
-  } catch (err) {
-    res
-      .status(500)
-      .json({ err: "There was a problem processing your request" });
+      .json({ message: "There is a problem processing request", error: err });
   }
 });
 
-//edit list item
-router.put("/:tripId/lists/:itemId", async (req, res) => {
-  const { tripId, itemId } = req.params;
-  const changes = req.body;
-
+//edit todo list done status
+router.put("/:tripId/:list", async (req, res) => {
+  const { tripId } = req.params;
+  const listType = req.params.list;
   try {
-    const edited = await list.editItem(tripId, itemId, changes);
-    console.log(edited);
-    if (!edited) {
-      res.status(404).json({ err: "Item not found" });
+    if (listType === "todos") {
+      const todo = req.body;
+      const edited = await list.checkTodo(tripId, todo);
+      console.log("edit todo success: ", edited);
+      res.status(201).json({ message: "edit successful" });
+    } else if (listType === "packing") {
+      const pack = req.body;
+      const edited = await list.checkPacking(tripId, pack);
+      console.log("edit packing success: ", edited);
+      res.status(201).json({ message: "edit successful" });
     } else {
-      res.status(201).json(1);
+      res.status(404).json({ message: "List doesn't exist" });
     }
   } catch (err) {
-    res
-      .status(500)
-      .json({ err: "There was a problem processing your request" });
+    console.log("Edit list ep: ", err);
+    res.status(500).json({ message: "wrong", err });
   }
 });
 
-//delete list item
-router.delete("/:tripId/lists/:itemId", async (req, res) => {
-  const { tripId, itemId } = req.params;
+//delete todo list item in trip
+router.delete("/:tripId/todos", async (req, res) => {
+  const { tripId } = req.params;
+  const todo = req.body;
 
   try {
-    await list.removeItem(tripId, itemId);
-    const stillThere = await list.getById(tripId, itemId);
-    console.log(stillThere);
-    if (!stillThere) {
-      res.status(200).json(1);
-    } else {
-      res.status(400).json(0);
-    }
+    const updated = await list.removeTodo(tripId, todo);
+    console.log("Updated todo: ", updated);
+    res.status(200).json({ message: "Updated" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ err: "There was a problem processing your request" });
+    console.log("delete todos endpoint: ", err);
+    res.status(500).json({ message: "Processing Error", err: err });
+  }
+});
+
+//delete packing list item in trip
+router.delete("/:tripId/packing", async (req, res) => {
+  const { tripId } = req.params;
+  const pack = req.body;
+
+  try {
+    const updated = await list.removePacking(tripId, pack);
+    console.log("Updated packing: ", updated);
+    res.status(200).json({ message: "Updated" });
+  } catch (err) {
+    console.log("delete packing endpoint: ", err);
+    res.status(500).json({ message: "Processing Error", err: err });
   }
 });
 
