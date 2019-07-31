@@ -41,7 +41,7 @@ function getAllItems(tripId) {
         console.log("There are no matching documents");
       }
       const items = [];
-      snapshot.forEach(doc => items.push(doc.data()));
+      snapshot.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
       return items;
     })
     .catch(err => console.log(err));
