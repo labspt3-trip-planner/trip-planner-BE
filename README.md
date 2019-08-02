@@ -4,10 +4,11 @@
 - POST Login: https://labspt3-trip-planner.herokuapp.com/auth/login - Login
 
 - POST Register: https://labspt3-trip-planner.herokuapp.com/auth/register - Register new user
-  
 
 
-
+## Login/Register params:
+- email: (string),
+- password: (string)
 
 
 ## User endpoints
