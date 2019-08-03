@@ -23,7 +23,9 @@ function getTripById(id) {
     .collection("trips")
     .doc(`${id}`)
     .get()
-    .then(res => res.data())
+    .then(res => {
+      return { tripId: res.id, ...res.data() };
+    })
     .catch(err => err);
 }
 
