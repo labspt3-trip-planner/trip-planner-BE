@@ -2,7 +2,7 @@
 
 ## Login endpoints:
 
-- POST Login: <https://labspt3-trip-planner.herokuapp.com/auth/login/> - Login
+- POST Login: <https://labspt3-trip-planner.herokuapp.com/auth/login/> - Login doesn't really do anything, just here to show endpoint.
 
 - POST Register: <https://labspt3-trip-planner.herokuapp.com/auth/register/> - Register new user
 
