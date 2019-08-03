@@ -35,3 +35,7 @@
 ## ToDo endpoints
 
 ## Packing endpoints
+
+- GET By ID:  <https://labspt3-trip-planner.herokuapp.com/tripId/packing>
+
+- DELETE packing list by ID: <https://labspt3-trip-planner.herokuapp.com/tripId/packing>
